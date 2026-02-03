@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Fitness Hub</title>
+
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background: linear-gradient(to right, #ffffff, #000000);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .content-box {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      border-radius: 10px;
+    }
+
+    .side-image img {
+      width: 450px;
+      border-radius: 10px;
+      margin-right: 30px;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 30px;
+      border-radius: 10px;
+      width: 320px;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    h2, p {
+      color: black;
+    }
+
+    a {
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="content-box">
+
+  <!-- SIDE IMAGE -->
+  <div class="side-image">
+    <img src="logo1.jpg" alt="Fitness Image">
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div class="form-container" id="login-form">
+    <h2>LOGIN</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <p>Don't have an account?
+      <a onclick="showRegister()">Create one</a>
+    </p>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div class="form-container" id="register-form" style="display:none;">
+    <h2>CREATE ACCOUNT</h2>
+    <input type="text" id="new-name" placeholder="Full Name" required>
+    <input type="email" id="new-email" placeholder="Email" required>
+    <input type="text" id="new-phone" placeholder="Phone" required>
+    <input type="password" id="new-password" placeholder="Password" required>
+    <button onclick="createAccount()">Create Account</button>
+    <p>Already have an account?
+      <a onclick="showLogin()">Login</a>
+    </p>
+  </div>
+
+</div>
+
+<script>
+  function showRegister() {
+    document.getElementById("login-form").style.display = "none";
+    document.getElementById("register-form").style.display = "block";
+  }
+
+  function showLogin() {
+    document.getElementById("login-form").style.display = "block";
+    document.getElementById("register-form").style.display = "none";
+  }
+
+  function createAccount() {
+    const name = document.getElementById("new-name").value.trim();
+    const email = document.getElementById("new-email").value.trim();
+    const phone = document.getElementById("new-phone").value.trim();
+    const password = document.getElementById("new-password").value.trim();
+
+    if (!name || !email || !phone || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    users.push({
+      name: name,
+      email: email,
+      phone: phone,
+      password: password
+    });
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Account created successfully!");
+    showLogin();
+  }
+
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const user = users.find(
+      u => u.name === username && u.password === password
+    );
+
+    if (user) {
+      // SAVE LOGGED IN USER
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      window.location.href = "fitnesshub.html";
+    } else {
+      alert("Invalid username or password");
+    }
+  }
+</script>
+
+</body>
+</html>
